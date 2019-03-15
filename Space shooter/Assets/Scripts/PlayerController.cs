@@ -12,10 +12,12 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody rigidbody;
     private float nextValidFireTime;
+    private AudioSource audioSource;
 
     private void Awake()
     {
         rigidbody = GetComponent<Rigidbody>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -25,7 +27,7 @@ public class PlayerController : MonoBehaviour
             nextValidFireTime = Time.time + fireRate;
             Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
 
-            GetComponent<AudioSource>().Play();
+            audioSource.Play();
         }
     }
 
