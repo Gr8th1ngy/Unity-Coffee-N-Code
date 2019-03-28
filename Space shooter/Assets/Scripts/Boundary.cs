@@ -4,11 +4,9 @@ using UnityEngine;
 
 public class Boundary : MonoBehaviour
 {
-
     BoxCollider collider;
 
-    private void Start()
-    {
+    private void Start() {
 
         collider = GetComponent<BoxCollider>();
 
@@ -20,8 +18,7 @@ public class Boundary : MonoBehaviour
         collider.size = new Vector3(2.0f * xScale, collider.size.y, 2.0f * zScale);
     }
 
-    private void OnTriggerExit(Collider other)
-    {
+    private void OnTriggerExit(Collider other) {
         Destroy(other.gameObject);
     }
 }

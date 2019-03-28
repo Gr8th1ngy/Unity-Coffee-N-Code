@@ -2,46 +2,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DestroyByContact : MonoBehaviour
+public class DestroybyContact : MonoBehaviour
 {
     public GameObject explosion;
-    public GameObject playerExplosion;
-    public int scoreValue;
-    private GameController gameController;
+    public GameObject playerExplosion; 
 
-    private void Start()
-    {
-        GameObject gameControllerObject = GameObject.FindWithTag("GameController");
+    private void OnTriggerEnter(Collider other) {
 
-        if (gameControllerObject != null)
-        {
-            gameController = gameControllerObject.GetComponent<GameController>();
-        }
-        else
-        {
-            Debug.Log("Cannot find 'GameController' GameObject");
-        }
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.tag == "Boundary" || other.tag == "Enemy")
+        if (other.tag == "Boundary")
         {
             return;
         }
 
-        if (explosion != null)
+        if (explosion != null) 
         {
             Instantiate(explosion, transform.position, transform.rotation);
         }
 
         if (other.tag == "Player" && playerExplosion != null)
         {
-            Instantiate(playerExplosion, other.transform.position, other.transform.rotation);
-            gameController.GameOver();
+            Instantiate(playerExplosion, transform.position, transform.rotation);
         }
-
-        gameController.AddScore(scoreValue);
 
         Destroy(other.gameObject);
         Destroy(gameObject);

@@ -6,47 +6,47 @@ public class PlayerController : MonoBehaviour
 {
     public float speed;
     public float tilt;
+
     public GameObject shot;
     public Transform shotSpawn;
     public float fireRate;
 
     private Rigidbody rigidbody;
     private float nextValidFireTime;
-    private AudioSource audioSource;
 
-    private void Awake()
-    {
+    private void Awake() {
         rigidbody = GetComponent<Rigidbody>();
-        audioSource = GetComponent<AudioSource>();
-    }
 
-    private void Update()
-    {
-        if (Input.GetButton("Fire1") && Time.time > nextValidFireTime)
-        {
-            nextValidFireTime = Time.time + fireRate;
-            Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
-
-            audioSource.Play();
+        if (!rigidbody) {
+            Debug.LogError("Missing Rigidbody");
         }
     }
 
-    private void FixedUpdate()
-    {
+    private void Update() {
+        if (Input.GetButton("Fire1") && Time.time > nextValidFireTime)
+        {
+            nextValidFireTime = Time.time + fireRate;
+
+            Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
+        }
+    }
+
+    private void FixedUpdate() {
         float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical = Input.GetAxis("Vertical");
 
-        Vector3 moveVector = new Vector3(moveHorizontal, 0.0f, moveVertical);
+        Vector3 moveVector = new Vector3(moveHorizontal, 0, moveVertical);
+
         rigidbody.velocity = moveVector * speed;
 
         Vector3 playerPosition = Camera.main.WorldToScreenPoint(transform.position);
 
-        Vector3 clampedScreenSpacePosition = new Vector3(Mathf.Clamp(playerPosition.x, 0.0f, Screen.width), Mathf.Clamp(playerPosition.y, 0.0f, Screen.height), playerPosition.z);
+        Vector3 clampedScreenSpacePosition = new Vector3(Mathf.Clamp(playerPosition.x, 0, Screen.width), Mathf.Clamp(playerPosition.y, 0, Screen.height), playerPosition.z);
 
         Vector3 clampedWorldSpacePosition = Camera.main.ScreenToWorldPoint(clampedScreenSpacePosition);
 
-        rigidbody.position = new Vector3(clampedWorldSpacePosition.x, 0.0f, clampedWorldSpacePosition.z);
+        rigidbody.position = new Vector3(clampedWorldSpacePosition.x, 0, clampedWorldSpacePosition.z);
 
-        rigidbody.rotation = Quaternion.Euler(0, 0, rigidbody.velocity.x * -tilt);
+        rigidbody.rotation = Quaternion.Euler(0,0,rigidbody.velocity.x * -tilt);
     }
 }
